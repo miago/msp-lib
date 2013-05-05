@@ -1,0 +1,35 @@
+#ifndef __TIMER_A__
+#define __TIMER_A__
+
+//prototypes
+
+void setTimerA1Mode( char mode );
+void setTimerA1Top( void );
+void setTimerA1ClockSource( char source );
+void setTimerA1Divider( char divider );
+void resetTimerA1Counter( void );
+void enableTimerA1CCInterrupt( void );
+void disableTimerA1CCInterrupt( void );
+
+
+//Timer mode
+ 
+#define TAMODE_STOP	0
+#define TAMODE_UP	1
+#define TAMODE_CONT	2
+#define TAMODE_UP_DW	3
+#define TAMODE_UNDEF	4
+ 
+#define TA_TACLK	0
+#define TA_ACLK		1
+#define TA_SMCLK	2
+#define TA_INCLK	3
+#define TA_UNDEF	4
+
+#define TA_DIV_1	0
+#define TA_DIV_2	1
+#define TA_DIV_4	2
+#define TA_DIV_8	3
+#define TA_DIV_UNDEF	4
+
+#endif
