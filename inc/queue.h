@@ -22,7 +22,7 @@
 
 #include <message.h>
 
-#define MAX_QUEUE    30
+#define MAX_QUEUE    10
 
 #define QUEUE_OK     0
 #define QUEUE_FULL   1

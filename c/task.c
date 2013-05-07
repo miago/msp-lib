@@ -19,8 +19,35 @@
 
 #include <task.h>
 
-task *tasks[10];
+task *tasks[TASK_MAX];
 
-void registerTask( task *tsk ){
+int taskCounter = 0;
+
+int registerTask( task *tsk ){
         
+        if( taskCounter == ( TASK_MAX-1 ) ){
+                return TASK_FULL;
+        }
+        else {
+                tasks[taskCounter] = tsk;
+                taskCounter++;
+        }
+        
+        return TASK_OK;
+}
+
+int sendMessage( message *msg ){
+        char id = msg->destination;
+        char id_counter = 0;
+        int a = 0;
+        
+        for( a = 0; a < taskCounter; a++ ){
+                id_counter = tasks[a]->user;
+                if( id_counter == id ){
+                        //found a matching task 
+                        tasks[a]->handler(msg);
+                        return TASK_EXECUTED;
+                }
+        }
+        return TASK_404;
 }

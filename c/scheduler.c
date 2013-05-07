@@ -18,11 +18,20 @@
 */
 
 #include <scheduler.h>
+#include <task.h>
+#include <queue.h>
 
 void initScheduler(){
         
 }
 
 void scheduler(){
-        //cycle trough all tasks
+        //get message queue element
+        message *sMessage;
+        
+        if( getMessage( &sMessage ) == QUEUE_OK ){
+                //task received
+                sendMessage( sMessage );
+        }
+        
 }

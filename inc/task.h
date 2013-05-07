@@ -20,8 +20,22 @@
 #ifndef __TASK_H__
 #define __TASK_H__
 
+#include <message.h>
+
+#define TASK_OK         0
+#define TASK_FULL       1
+
+#define TASK_MAX        10
+
+#define TASK_EXECUTED   0
+#define TASK_404        1
+
 typedef struct{
-        void *handler;
+        char user;
+        void (*handler)(message *);
 }task;
+
+int registerTask( task *tsk );
+int sendMessage( message *msg );
 
 #endif
