@@ -21,11 +21,10 @@
 #define __TASK_H__
 
 #include <message.h>
+#define TASK_MAX        10
 
 #define TASK_OK         0
 #define TASK_FULL       1
-
-#define TASK_MAX        10
 
 #define TASK_EXECUTED   0
 #define TASK_404        1
