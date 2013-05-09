@@ -29,20 +29,15 @@ void initScheduler(){
 
 void scheduler(){
         //get message queue element
-        message *sMessage;
-        
+        message sMessage;    
         int error;
-        int u_source;
         
-        error = getMessage( sMessage );
-        
-        u_source = sMessage->source;
-
+        error = getMessage( &sMessage );
         
         if( error == QUEUE_OK ){
                 //task received
                 schedPass++;
-                sendMessage( sMessage );
+                sendMessage( &sMessage );
         } else{
                 
         }
