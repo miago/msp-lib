@@ -30,9 +30,9 @@
 
 void initQueue();
 
-char putMessage( message *msg );
+int putMessage( message *msg );
 
-char getMessage( message *msg );
+int getMessage( message *msg );
 
 #endif
 

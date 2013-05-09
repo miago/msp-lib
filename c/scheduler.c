@@ -21,6 +21,8 @@
 #include <task.h>
 #include <queue.h>
 
+int schedPass = 0;
+
 void initScheduler(){
         
 }
@@ -29,9 +31,20 @@ void scheduler(){
         //get message queue element
         message *sMessage;
         
-        if( getMessage( &sMessage ) == QUEUE_OK ){
+        int error;
+        int u_source;
+        
+        error = getMessage( sMessage );
+        
+        u_source = sMessage->source;
+
+        
+        if( error == QUEUE_OK ){
                 //task received
+                schedPass++;
                 sendMessage( sMessage );
+        } else{
+                
         }
         
 }

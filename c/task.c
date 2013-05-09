@@ -22,6 +22,7 @@
 task *tasks[TASK_MAX];
 
 int taskCounter = 0;
+int match = 0;
 
 int registerTask( task *tsk ){
         
@@ -37,13 +38,14 @@ int registerTask( task *tsk ){
 }
 
 int sendMessage( message *msg ){
-        char id = msg->destination;
-        char id_counter = 0;
+        int id = msg->destination;
+        int id_task = 0;
         int a = 0;
         
         for( a = 0; a < taskCounter; a++ ){
-                id_counter = tasks[a]->user;
-                if( id_counter == id ){
+                id_task = tasks[a]->user;
+                if( id_task == id ){
+                        match++;
                         //found a matching task 
                         tasks[a]->handler(msg);
                         return TASK_EXECUTED;

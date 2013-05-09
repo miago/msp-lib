@@ -28,7 +28,7 @@ void initQueue(){
         queuePointer = 0;
 }
 
-char putMessage( message *msg ){
+int putMessage( message *msg ){
         if(queuePointer == ( MAX_QUEUE - 1 )){
                 return QUEUE_FULL;
         }
@@ -40,13 +40,13 @@ char putMessage( message *msg ){
         return QUEUE_OK;
 }
 
-char getMessage( message *msg ){
+int getMessage( message *msg ){
         if( queuePointer == 0 ){
                 return QUEUE_EMPTY;
         }
         else {
                 queuePointer--;
-                msg = messages[queuePointer];
+                *msg = *messages[queuePointer];
         }
         
         return QUEUE_OK;

@@ -31,7 +31,7 @@
 #define TASK_404        1
 
 typedef struct{
-        char user;
+        int user;
         void (*handler)(message *);
 }task;
 

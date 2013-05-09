@@ -25,14 +25,22 @@
 #define MSG_P_1         1 //Normal
 #define MSG_P_3         2 //Low
 #define MSG_P_4         3 //Lowest
+#define MSG_P_5         4 //Whatever
+#define MSG_P_6         5 //only if you want
+#define MSG_P_7         6 //plz don't do it!
+
+#define MSG_UNPROCESSED 0
+#define MSG_PROCESSED   1
+#define MSG_INTERRUPTED 2
 
 
 typedef struct{
-        char source;
-        char destination;
-        char priority;
+        int source;
+        int destination;
+        int priority;
         int id;
         int event;
+        int processed;
 }message;
 
 #endif
