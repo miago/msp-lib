@@ -20,16 +20,23 @@
 #include <queue.h>
 #include <message.h>
 
-message *messages[MAX_QUEUE];
+message *messages[MAX_MSG_QUEUE];
+message messagePool[MAX_MSG_POOL];
 int queuePointer;
 //lifo message queue
 
 void initQueue(){
-        queuePointer = 0;
+    int a = 0;
+	queuePointer = 0;
+
+    for( a = 0; a < MAX_MSG_POOL; a++ ){
+    	clearMessage( &messagePool[a] );
+    	messagePool[a].processed = MSG_PROCESSED;
+    }
 }
 
 int putMessage( message *msg ){
-        if(queuePointer == ( MAX_QUEUE - 1 )){
+        if(queuePointer == ( MAX_MSG_QUEUE - 1 )){
                 return QUEUE_FULL;
         }
         else {
@@ -50,4 +57,22 @@ int getMessage( message *msg ){
         }
         
         return QUEUE_OK;
+}
+
+void getFreeMessage( message **msg ){
+	int a = 0;
+	for( a = 0; a < MAX_MSG_POOL; a++ ){
+		if( messagePool[a].processed == MSG_PROCESSED ){
+			clearMessage(&messagePool[a]);
+			*msg = &messagePool[a];
+		}
+	}
+}
+
+void clearMessage( message *msg ){
+	msg->destination = MSG_U_UNDEF;
+	msg->source = MSG_U_UNDEF;
+	msg->event = MSG_EVT_UNDEF;
+	msg->id = MSG_P_UNDEF;
+	msg->priority = MSG_P_UNDEF;
 }

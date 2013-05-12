@@ -21,25 +21,30 @@
 #include <task.h>
 #include <queue.h>
 
-int schedPass = 0;
+int schedulerRunning;
 
 void initScheduler(){
-        
+	schedulerRunning = 0;
 }
 
 void scheduler(){
-        //get message queue element
-        message sMessage;    
-        int error;
-        
-        error = getMessage( &sMessage );
-        
-        if( error == QUEUE_OK ){
-                //task received
-                schedPass++;
-                sendMessage( &sMessage );
-        } else{
-                
-        }
-        
+	//get message queue element
+	message sMessage;
+	int error;
+
+	//Mutex
+	if( schedulerRunning == 1 ){
+		return;
+	}
+	schedulerRunning = 1;
+
+
+	error = getMessage( &sMessage );
+
+	if( error == QUEUE_OK ){
+		//task received
+		sendMessage( &sMessage );
+	}
+
+	schedulerRunning = 0;
 }

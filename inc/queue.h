@@ -22,7 +22,8 @@
 
 #include <message.h>
 
-#define MAX_QUEUE    10
+#define MAX_MSG_QUEUE	10
+#define MAX_MSG_POOL	10
 
 #define QUEUE_OK     0
 #define QUEUE_FULL   1
@@ -33,6 +34,10 @@ void initQueue();
 int putMessage( message *msg );
 
 int getMessage( message *msg );
+
+void getFreeMessage( message **msg );
+
+void clearMessage( message *msg );
 
 #endif
 

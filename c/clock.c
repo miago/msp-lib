@@ -1,4 +1,5 @@
 #include <msp430.h>
+#include <msp430g2553.h>
 
 #include <clock.h>
 
@@ -113,6 +114,7 @@ void setDCOCLK( char freq ){
 	default:
 		DCOCTL = CALDCO_1MHZ;
 		BCSCTL1 = CALBC1_1MHZ;
+		break;
 	}
 }
 
