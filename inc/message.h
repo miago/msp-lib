@@ -45,6 +45,7 @@ typedef struct{
         int id;
         int event;
         int processed;
-}message;
+        unsigned char *argument;
+} message;
 
 #endif

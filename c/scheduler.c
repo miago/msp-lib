@@ -30,7 +30,6 @@ void initScheduler(){
 void scheduler(){
 	//get message queue element
 	message sMessage;
-	int error;
 
 	//Mutex
 	if( schedulerRunning == 1 ){
@@ -38,11 +37,7 @@ void scheduler(){
 	}
 	schedulerRunning = 1;
 
-
-	error = getMessage( &sMessage );
-
-	if( error == QUEUE_OK ){
-		//task received
+	while( getMessage( &sMessage ) != QUEUE_EMPTY ){
 		sendMessage( &sMessage );
 	}
 

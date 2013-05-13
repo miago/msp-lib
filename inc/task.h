@@ -30,11 +30,13 @@
 #define TASK_404        1
 
 typedef struct{
-        int user;
-        void (*handler)(message *);
+	unsigned char *cmdName;
+	int user;
+	void (*handler)(message *);
 }task;
 
 int registerTask( task *tsk );
 int sendMessage( message *msg );
+task* getTaskByCmdName( unsigned char * commandName, int length );
 
 #endif

@@ -36,37 +36,40 @@ void initQueue(){
 }
 
 int putMessage( message *msg ){
-        if(queuePointer == ( MAX_MSG_QUEUE - 1 )){
-                return QUEUE_FULL;
-        }
-        else {
-                messages[queuePointer] = msg;
-                queuePointer++;
-        }
-        
-        return QUEUE_OK;
+	//TODO add mutex
+	if( queuePointer == ( MAX_MSG_QUEUE - 1 )){
+		return QUEUE_FULL;
+	}
+	else {
+		messages[queuePointer] = msg;
+		queuePointer++;
+	}
+
+	return QUEUE_OK;
 }
 
 int getMessage( message *msg ){
-        if( queuePointer == 0 ){
-                return QUEUE_EMPTY;
-        }
-        else {
-                queuePointer--;
-                *msg = *messages[queuePointer];
-        }
-        
-        return QUEUE_OK;
+	if( queuePointer == 0 ){
+		return QUEUE_EMPTY;
+	}
+	else {
+		queuePointer--;
+		*msg = *messages[queuePointer];
+	}
+
+	return QUEUE_OK;
 }
 
-void getFreeMessage( message **msg ){
+int getFreeMessage( message **msg ){
 	int a = 0;
 	for( a = 0; a < MAX_MSG_POOL; a++ ){
 		if( messagePool[a].processed == MSG_PROCESSED ){
 			clearMessage(&messagePool[a]);
 			*msg = &messagePool[a];
+			return QUEUE_OK;
 		}
 	}
+	return QUEUE_ERROR;
 }
 
 void clearMessage( message *msg ){
@@ -75,4 +78,5 @@ void clearMessage( message *msg ){
 	msg->event = MSG_EVT_UNDEF;
 	msg->id = MSG_P_UNDEF;
 	msg->priority = MSG_P_UNDEF;
+	msg->processed = MSG_UNPROCESSED;
 }
