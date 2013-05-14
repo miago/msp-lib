@@ -34,7 +34,7 @@ void initQueue();
 
 int putMessage( message *msg );
 
-int getMessage( message *msg );
+int getMessage( message **msg );
 
 int getFreeMessage( message **msg );
 

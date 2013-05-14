@@ -48,7 +48,7 @@ int sendMessage( message *msg ){
 		if( id_task == id ){
 			match++;
 			//found a matching task
-			tasks[a]->handler(msg);
+			tasks[a]->handler( msg );
 			return TASK_EXECUTED;
 		}
 	}

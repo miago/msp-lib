@@ -32,7 +32,7 @@
 typedef struct{
 	unsigned char *cmdName;
 	int user;
-	void (*handler)(message *);
+	void ( *handler )( message * );
 }task;
 
 int registerTask( task *tsk );

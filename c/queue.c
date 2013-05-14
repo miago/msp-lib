@@ -48,13 +48,13 @@ int putMessage( message *msg ){
 	return QUEUE_OK;
 }
 
-int getMessage( message *msg ){
+int getMessage( message **msg ){
 	if( queuePointer == 0 ){
 		return QUEUE_EMPTY;
 	}
 	else {
 		queuePointer--;
-		*msg = *messages[queuePointer];
+		*msg = messages[queuePointer];
 	}
 
 	return QUEUE_OK;
@@ -64,7 +64,7 @@ int getFreeMessage( message **msg ){
 	int a = 0;
 	for( a = 0; a < MAX_MSG_POOL; a++ ){
 		if( messagePool[a].processed == MSG_PROCESSED ){
-			clearMessage(&messagePool[a]);
+			clearMessage( &messagePool[a] );
 			*msg = &messagePool[a];
 			return QUEUE_OK;
 		}
