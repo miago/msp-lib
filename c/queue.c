@@ -80,3 +80,19 @@ void clearMessage( message *msg ){
 	msg->priority = MSG_P_UNDEF;
 	msg->processed = MSG_UNPROCESSED;
 }
+
+int getQueuePointer(){
+	return queuePointer;
+}
+
+int getNrOfUnprocMessages(){
+	int a;
+	int b = 0;
+	for( a = 0; a < MAX_MSG_POOL; a++ ){
+		if( messagePool[a].processed == MSG_UNPROCESSED ){
+			b++;
+		}
+	}
+
+	return b;
+}

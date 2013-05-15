@@ -40,5 +40,9 @@ int getFreeMessage( message **msg );
 
 void clearMessage( message *msg );
 
+int getQueuePointer();
+
+int getNrOfUnprocMessages();
+
 #endif
 
