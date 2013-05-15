@@ -22,12 +22,14 @@
 
 message *messages[MAX_MSG_QUEUE];
 message messagePool[MAX_MSG_POOL];
-int queuePointer;
+int fifoIn, fifoOut, fifoAvl;
 //lifo message queue
 
 void initQueue(){
     int a = 0;
-	queuePointer = 0;
+    fifoAvl = 0;
+    fifoIn = 0;
+    fifoOut = 0;
 
     for( a = 0; a < MAX_MSG_POOL; a++ ){
     	clearMessage( &messagePool[a] );
@@ -37,24 +39,37 @@ void initQueue(){
 
 int putMessage( message *msg ){
 	//TODO add mutex
-	if( queuePointer == ( MAX_MSG_QUEUE - 1 )){
+	if( fifoAvl == MAX_MSG_QUEUE ){
 		return QUEUE_FULL;
 	}
+
 	else {
-		messages[queuePointer] = msg;
-		queuePointer++;
+		messages[fifoIn] = msg;
+		fifoAvl++;
+		fifoIn = ( fifoIn + 1 ) % MAX_MSG_QUEUE;
+		return QUEUE_OK;
 	}
 
 	return QUEUE_OK;
 }
 
+int getMessageQueueStatus(){
+	if( fifoAvl == 0 ){
+		return QUEUE_EMPTY;
+	} else if( fifoAvl == MAX_MSG_QUEUE ){
+		return QUEUE_FULL;
+	}
+	return QUEUE_OK;
+}
+
 int getMessage( message **msg ){
-	if( queuePointer == 0 ){
+	if( fifoAvl == 0 ){
 		return QUEUE_EMPTY;
 	}
 	else {
-		queuePointer--;
-		*msg = messages[queuePointer];
+		*msg = messages[fifoOut];
+		fifoOut = ( fifoOut + 1 ) % MAX_MSG_QUEUE;
+		fifoAvl--;
 	}
 
 	return QUEUE_OK;
@@ -81,18 +96,6 @@ void clearMessage( message *msg ){
 	msg->processed = MSG_UNPROCESSED;
 }
 
-int getQueuePointer(){
-	return queuePointer;
-}
-
 int getNrOfUnprocMessages(){
-	int a;
-	int b = 0;
-	for( a = 0; a < MAX_MSG_POOL; a++ ){
-		if( messagePool[a].processed == MSG_UNPROCESSED ){
-			b++;
-		}
-	}
-
-	return b;
+	return fifoAvl;
 }

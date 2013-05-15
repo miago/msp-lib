@@ -37,7 +37,6 @@
 #define MSG_EVT_UNDEF	0
 #define MSG_ID_UNDEF	0
 
-
 typedef struct{
         int source;
         int destination;
@@ -45,6 +44,7 @@ typedef struct{
         int id;
         int event;
         int processed;
+        struct message *dependency;
         unsigned char *argument;
 } message;
 

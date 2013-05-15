@@ -38,9 +38,9 @@ int getMessage( message **msg );
 
 int getFreeMessage( message **msg );
 
-void clearMessage( message *msg );
+int getMessageQueueStatus();
 
-int getQueuePointer();
+void clearMessage( message *msg );
 
 int getNrOfUnprocMessages();
 
