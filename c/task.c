@@ -19,6 +19,7 @@
 
 #include <task.h>
 #include <string.h>
+#include <users.h>
 
 task *tasks[TASK_MAX];
 
@@ -39,7 +40,7 @@ int registerTask( task *tsk ){
 }
 
 int sendMessage( message *msg ){
-	int id = msg->destination;
+	MESSAGE_Q_USERS id = msg->destination;
 	int id_task = 0;
 	int a = 0;
 

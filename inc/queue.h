@@ -25,20 +25,22 @@
 #define MAX_MSG_QUEUE	10
 #define MAX_MSG_POOL	10
 
-#define QUEUE_OK     	0
-#define QUEUE_FULL   	1
-#define QUEUE_EMPTY  	2
-#define QUEUE_ERROR		3
+typedef enum{
+	queue_ok,
+	queue_full,
+	queue_empty,
+	queue_error
+} QUEUE_STATUS;
 
 void initQueue();
 
-int putMessage( message *msg );
+QUEUE_STATUS putMessage( message *msg );
 
-int getMessage( message **msg );
+QUEUE_STATUS getMessage( message **msg );
 
-int getFreeMessage( message **msg );
+QUEUE_STATUS getFreeMessage( message **msg );
 
-int getMessageQueueStatus();
+QUEUE_STATUS getMessageQueueStatus();
 
 void clearMessage( message *msg );
 

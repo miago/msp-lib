@@ -20,6 +20,7 @@
 #include <scheduler.h>
 #include <task.h>
 #include <queue.h>
+#include <stddef.h>
 
 int schedulerRunning;
 
@@ -30,6 +31,7 @@ void initScheduler(){
 void scheduler(){
 	//get message queue element
 	message *sMessage;
+	message *auxMessage;
 
 	//Mutex
 	if( schedulerRunning == 1 ){
@@ -37,9 +39,18 @@ void scheduler(){
 	}
 	schedulerRunning = 1;
 
-	while( getMessage( &sMessage ) != QUEUE_EMPTY ){
+	while( getMessage( &sMessage ) != queue_empty ){
+		//check if dependencies are met
+		if( sMessage->dependency != NULL ){
+			auxMessage = sMessage->dependency;
+			//sMessage->dependency = sMessage;
+			if( auxMessage->status != processed_status ){
+				putMessage( sMessage );
+				return;
+			}
+			auxMessage->dependents--;
+		}
 		sendMessage( sMessage );
 	}
-
 	schedulerRunning = 0;
 }

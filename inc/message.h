@@ -20,32 +20,40 @@
 #ifndef __MESSAGE_H__
 #define __MESSAGE_H__
 
+#include <users.h>
+
 //Message queue priority
-#define MSG_P_0         0 //Highest
-#define MSG_P_1         1 //Normal
-#define MSG_P_3         2 //Low
-#define MSG_P_4         3 //Lowest
-#define MSG_P_5         4 //Whatever
-#define MSG_P_6         5 //only if you want
-#define MSG_P_UNDEF     6
 
-#define MSG_UNPROCESSED 0
-#define MSG_PROCESSED   1
-#define MSG_INTERRUPTED 2
+typedef enum{
+	highest_priority	= 0,
+	high_priority 		= 1,
+	normal_priority		= 2,
+	low_priority		= 3,
+	lowest_priority		= 4,
+	undef_priority		= 5
+} MESSAGE_PRIORITY;
 
-#define MSG_U_UNDEF		0
-#define MSG_EVT_UNDEF	0
+typedef enum{
+	unprocessed_status	= 0,
+	processed_status	= 1,
+	interrupted_status	= 2,
+	undefinded_status	= 3
+} MESSAGE_STATUS;
+
 #define MSG_ID_UNDEF	0
 
-typedef struct{
-        int source;
-        int destination;
-        int priority;
+struct message_el {
+        MESSAGE_Q_USERS source;
+        MESSAGE_Q_USERS destination;
+        MESSAGE_PRIORITY priority;
         int id;
         int event;
-        int processed;
-        struct message *dependency;
+        MESSAGE_STATUS status;
+        struct message_el *dependency;
+        int dependents;
         unsigned char *argument;
-} message;
+};
+
+typedef struct message_el message;
 
 #endif

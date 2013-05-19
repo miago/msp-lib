@@ -19,81 +19,104 @@
 
 #include <queue.h>
 #include <message.h>
+#include <events.h>
+#include <stddef.h>
+
+#define GET_LOCK		fifoMutex=1
+#define RELEASE_LOCK	fifoMutex=0
 
 message *messages[MAX_MSG_QUEUE];
 message messagePool[MAX_MSG_POOL];
 int fifoIn, fifoOut, fifoAvl;
-//lifo message queue
+
+//I see deadlocks here!!!!
+//TODO when locked return;
+int fifoMutex;
+//fifo message queue
 
 void initQueue(){
     int a = 0;
     fifoAvl = 0;
     fifoIn = 0;
     fifoOut = 0;
+    fifoMutex = 0;
 
     for( a = 0; a < MAX_MSG_POOL; a++ ){
     	clearMessage( &messagePool[a] );
-    	messagePool[a].processed = MSG_PROCESSED;
+    	messagePool[a].status = processed_status;
     }
+
 }
 
-int putMessage( message *msg ){
-	//TODO add mutex
+QUEUE_STATUS putMessage( message *msg ){
+	while( fifoMutex != 0 );
+	GET_LOCK;
 	if( fifoAvl == MAX_MSG_QUEUE ){
-		return QUEUE_FULL;
+		RELEASE_LOCK;
+		return queue_full;
 	}
 
 	else {
 		messages[fifoIn] = msg;
 		fifoAvl++;
 		fifoIn = ( fifoIn + 1 ) % MAX_MSG_QUEUE;
-		return QUEUE_OK;
+		RELEASE_LOCK;
+		return queue_ok;
 	}
-
-	return QUEUE_OK;
+	RELEASE_LOCK;
+	return queue_ok;
 }
 
-int getMessageQueueStatus(){
+QUEUE_STATUS getMessageQueueStatus(){
 	if( fifoAvl == 0 ){
-		return QUEUE_EMPTY;
+		return queue_empty;
 	} else if( fifoAvl == MAX_MSG_QUEUE ){
-		return QUEUE_FULL;
+		return queue_full;
 	}
-	return QUEUE_OK;
+	return queue_ok;
 }
 
-int getMessage( message **msg ){
+QUEUE_STATUS getMessage( message **msg ){
+	while( fifoMutex != 0 );
+	GET_LOCK;
 	if( fifoAvl == 0 ){
-		return QUEUE_EMPTY;
+		RELEASE_LOCK;
+		return queue_empty;
 	}
 	else {
 		*msg = messages[fifoOut];
 		fifoOut = ( fifoOut + 1 ) % MAX_MSG_QUEUE;
 		fifoAvl--;
 	}
-
-	return QUEUE_OK;
+	RELEASE_LOCK;
+	return queue_ok;
 }
 
-int getFreeMessage( message **msg ){
+QUEUE_STATUS getFreeMessage( message **msg ){
 	int a = 0;
+	while( fifoMutex != 0 );
+	GET_LOCK;
 	for( a = 0; a < MAX_MSG_POOL; a++ ){
-		if( messagePool[a].processed == MSG_PROCESSED ){
+		if( ( messagePool[a].status == processed_status ) && ( messagePool[a].dependents == 0 ) ){
 			clearMessage( &messagePool[a] );
 			*msg = &messagePool[a];
-			return QUEUE_OK;
+			RELEASE_LOCK;
+			return queue_ok;
 		}
 	}
-	return QUEUE_ERROR;
+	RELEASE_LOCK;
+	return queue_error;
 }
 
 void clearMessage( message *msg ){
-	msg->destination = MSG_U_UNDEF;
-	msg->source = MSG_U_UNDEF;
-	msg->event = MSG_EVT_UNDEF;
-	msg->id = MSG_P_UNDEF;
-	msg->priority = MSG_P_UNDEF;
-	msg->processed = MSG_UNPROCESSED;
+	msg->destination = undef_user;
+	msg->source = undef_user;
+	msg->event = undef_event;
+	msg->id = MSG_ID_UNDEF;
+	msg->priority = undef_priority;
+	msg->status = unprocessed_status;
+	msg->dependency = NULL;
+	msg->dependents = 0;
 }
 
 int getNrOfUnprocMessages(){

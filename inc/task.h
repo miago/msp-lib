@@ -21,6 +21,7 @@
 #define __TASK_H__
 
 #include <message.h>
+#include <users.h>
 #define TASK_MAX        10
 
 #define TASK_OK         0
@@ -29,11 +30,14 @@
 #define TASK_EXECUTED   0
 #define TASK_404        1
 
-typedef struct{
+
+struct task_el {
 	unsigned char *cmdName;
-	int user;
+	MESSAGE_Q_USERS user;
 	void ( *handler )( message * );
-}task;
+};
+
+typedef struct task_el task;
 
 int registerTask( task *tsk );
 int sendMessage( message *msg );
